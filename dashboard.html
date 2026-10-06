@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Review Forge V3.0</title><link rel="stylesheet" href="monitor.css?v=public1"><script src="phone-bridge.js?v=public1" defer></script><script src="monitor-visuals.js?v=public1" defer></script><script src="monitor.js?v=public1" defer></script><style>.cloud-reader #feedback-link,.cloud-reader [data-view="outputs"],.cloud-reader [data-view="citations"],.cloud-reader .stage .text-button{display:none}</style></head>
+<body class="cloud-reader">
+<aside class="rail">
+  <a class="brand" href="./" aria-label="Review Forge 首页"><span class="brand-icon">R<span>F</span></span><span>Review Forge<small>V3.0 · 手机实时监控</small></span></a>
+  <div class="rail-caption">运行监督</div>
+  <nav aria-label="工作台视图">
+    <button class="nav active" data-view="overview"><span>◈</span>运行总览</button>
+    <button class="nav" data-view="events"><span>≋</span>实时事件<span class="nav-count" id="event-count">0</span></button>
+    <button class="nav" data-view="citations"><span>⊙</span>引文查证</button>
+    <button class="nav" data-view="outputs"><span>▤</span>稿件与报告</button>
+    <a class="nav" id="feedback-link" href="/feedback"><span>↗</span>人工反馈</a>
+  </nav>
+  <div class="rail-bottom"><span class="privacy-dot"></span>科研数据保留本机<p id="runtime-model">Pi Agent · 待读取模型</p></div>
+</aside>
+<main>
+  <header class="topbar"><div class="breadcrumb">工作台<span>/</span><b id="view-label">运行总览</b></div><div class="connection"><button id="desktop-settings" hidden>⚙ 模型设置</button><span id="connection-dot" class="dot"></span><span id="connection-text" role="status">正在连接</span><button class="icon-button" id="refresh" aria-label="立即刷新" title="立即刷新">↻</button></div></header>
+  <div class="content">
+    <div class="page-heading"><div><div class="eyebrow">REVIEW FORGE / LIVE</div><h1 id="heading">运行总览</h1></div><div class="project-picker"><label for="project">当前项目</label><select id="project"><option value="">加载项目…</option></select></div></div>
+    <div id="empty" class="empty" hidden>尚无项目。请先用现有 ReviewForge 项目入口建立任务。</div>
+    <div id="message" class="message" role="alert" hidden></div>
+    <div id="alerts" aria-live="polite"></div>
+    <section class="project-banner"><div><span id="runtime" class="badge">状态待读取</span><span class="muted" id="process"></span><h2 id="project-title">等待项目数据</h2><p id="project-question"></p></div><div class="banner-side"><div class="reactor" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><span>RF</span></div><div class="banner-detail"><span>最近活动</span><b id="last-activity">—</b><small id="observed">—</small></div></div></section>
+
+    <section id="desktop-controls" class="desktop-controls" hidden><div class="toolbar"><button id="create-project">＋ 新建项目</button><select id="source-level" aria-label="来源访问级别"><option value="full_text">实际全文</option><option value="abstract">仅摘要</option><option value="metadata">仅题录</option></select><button id="import-sources">导入文献</button><select id="task-action" aria-label="任务类型"><option value="resume">继续完整工作流</option><option value="draft">生成初稿</option><option value="review">独立审稿</option><option value="revise">修订稿件</option><option value="citations">逐处引文查证</option><option value="literature">阅读文献</option></select><button id="start-task" class="primary-button">▶ 开始任务</button><button id="pause-task" disabled>Ⅱ 安全暂停</button></div><p id="selected-model" class="muted"></p></section>
+    <div class="view" id="view-overview"><section class="network-panel"><div class="network-heading"><div><small>01 / AGENT ORCHESTRATION</small><h2>智能体协同运行图</h2></div><span class="live-label">● <span id="network-status">等待连接</span></span></div><div id="dashboard-instruments" class="dashboard-instruments" aria-label="实时仪表组"></div><div class="network-layout"><div id="network-map"></div><aside class="network-inspector"><small>CONCURRENT ACTIVITY</small><div class="network-big"><b id="network-active">0</b><span>/ 8 agents</span></div><div class="network-stat"><span>执行中请求</span><b id="network-requests">0</b></div><div class="network-stat"><span>运行进程</span><b id="network-pid">—</b></div><div class="network-current"><small>CURRENT TASK</small><p id="network-task"></p></div><p class="network-explanation">环形刻度表示已保存任务进度。亮线表示 Agent 正在通过 Pi 宿主执行请求；点击节点查看详情。</p></aside></div><div class="network-legend"><span><i></i>执行中</span><span>○ 等待 / 已保存</span><span>◌ 虚线轨道为布局参考</span><span>READ-ONLY SUPERVISION</span></div></section>
+<section class="telemetry-panel"><div class="telemetry-heading"><h2>实时运行遥测</h2><span id="telemetry-window" class="muted">60 秒观察窗</span></div><div id="telemetry-metrics" class="telemetry-metrics"></div><div class="telemetry-bottom"><div><small>OUTPUT USAGE / TOKENS · SEC⁻¹</small><svg id="rate-chart" viewBox="0 0 600 72" aria-label="最近观察到的输出用量回报速率曲线"><polyline id="rate-line" fill="none" stroke="#7ce9d2" stroke-width="2"/></svg><p id="telemetry-note"></p></div><div><h3>最近真实交互</h3><div id="live-interactions"></div></div></div></section>
+<section class="workflow-progress" id="workflow-progress" hidden><div class="progress-heading"><div><small>LIVE WORKFLOW / CHECKPOINTS</small><h2>流程任务进度</h2></div><strong id="overall-percent">0%</strong></div><div class="progress-track overall-track"><i id="overall-fill"></i></div><div id="progress-phases" class="progress-phases"></div><p id="progress-basis"></p><p id="progress-scope"></p></section>
+      
+      <div class="metrics">
+        <section class="metric"><label>模型请求</label><div><b id="requests">—</b><span id="request-limit"></span></div><small id="request-note">宿主实际记录</small></section>
+        <section class="metric"><label>实测 Token</label><div><b id="tokens">—</b></div><div class="meter"><i id="token-meter"></i></div><small id="token-note">预算正在读取</small></section>
+        <section class="metric"><label>引文核查位置</label><div><b id="checked">—</b><span id="citation-total"></span></div><div class="meter"><i id="citation-meter"></i></div><small id="citation-note">当前稿件版本</small></section>
+        <section class="metric"><label>累计执行时间</label><div><b id="elapsed">—</b></div><small id="elapsed-note">仅执行时间，排除停机间隔</small></section>
+      </div>
+      <div class="section-heading"><h2>Agent 活动</h2><span class="muted">8 个稳定身份 · 实时检查点进度</span></div>
+      <div class="agents" id="agents"></div>
+      <div class="lower-grid">
+        <section class="panel"><div class="panel-heading"><h2>阶段与检查点</h2><span id="stage-count" class="muted"></span></div><div id="stages" class="stage-list"></div></section>
+        <section class="panel"><div class="panel-heading"><h2>最近事件</h2><button class="text-button" id="all-events">查看全部 →</button></div><div id="recent-events" class="recent-events"></div></section>
+      </div>
+      <section class="evidence-strip"><div><label>登记来源</label><b id="source-total">—</b></div><div><label>全文 / 摘要</label><b id="source-access">—</b></div><div><label>当前稿件</label><b id="draft-version">—</b></div><div><label>正文词数</label><b id="body-words">—</b></div><div><label>用量未知请求</label><b id="unknown-usage">—</b></div></section>
+      <p class="footnote">引文数量按引用位置统计，重复引用分别计数。已保存核查反映模型判断，稿件仍需人工科学审查。</p>
+    </div>
+
+    <div class="view" id="view-events" hidden>
+      <section class="panel"><div class="panel-heading wrap"><div><h2>实时事件流</h2><p class="muted" id="event-scope">保留本次打开期间最近 1000 条事件</p></div><div class="toolbar"><input id="event-search" type="search" placeholder="搜索角色、阶段或事件" aria-label="搜索事件"><select id="event-kind" aria-label="执行来源"><option value="all">所有来源</option><option value="pi_live">真实模型</option><option value="fixture">测试夹具</option><option value="host">宿主</option><option value="human_revision">人工修改</option></select><button id="freeze-events">冻结列表</button><button id="export-events">导出事件</button></div></div><div class="table-scroll"><table><thead><tr><th>时间</th><th>事件</th><th>阶段 / 角色</th><th>来源</th><th>详情</th></tr></thead><tbody id="event-rows"></tbody></table></div></section>
+    </div>
+
+    <div class="view" id="view-citations" hidden>
+      <div class="citation-summary" id="citation-summary"></div>
+      <section class="panel"><div class="panel-heading wrap"><div><h2>逐处查证</h2><p class="muted" id="citation-scope">待读取</p></div><div class="toolbar"><input id="citation-search" type="search" placeholder="搜索来源、段落或论断" aria-label="搜索引文"><select id="citation-filter" aria-label="核查状态"><option value="all">所有状态</option><option value="pending">待核查</option><option value="supported">支持</option><option value="partially_supported">部分支持</option><option value="contradicted">相矛盾</option><option value="insufficient_evidence">证据不足</option><option value="not_accessible">无法访问</option></select><button id="export-citations">导出核查</button></div></div><div class="table-scroll"><table><thead><tr><th>来源 / 位置</th><th>引用论断</th><th>核查状态</th><th>详情</th></tr></thead><tbody id="citation-rows"></tbody></table></div><p class="footnote">仅显示与当前稿件版本匹配的已保存结果。改稿、来源变更后的有效性由宿主查证流程核验。</p></section>
+    </div>
+
+    <div class="view" id="view-outputs" hidden><div class="output-grid"><section class="panel"><div class="panel-heading"><h2>已保存产物</h2></div><div id="outputs"></div></section><section class="panel output-preview"><div class="panel-heading"><h2 id="output-title">产物预览</h2><button id="export-output" disabled>导出 JSON</button></div><div id="output-preview" class="preview"><p class="muted">选择一份稿件或报告，查看已完成内容。</p></div></section></div></div>
+  </div>
+</main>
+<dialog id="detail"><div class="dialog-heading"><h2 id="detail-title">详情</h2><button id="detail-close" class="icon-button" aria-label="关闭详情">×</button></div><div id="detail-body" class="preview"></div></dialog>
+<dialog id="model-settings"><div class="dialog-heading"><h2>模型与工作目录</h2><button class="icon-button" id="settings-close" aria-label="关闭模型设置">×</button></div><form id="settings-form" class="desktop-form"><label>调用方式<select id="provider"><option value="openai_compatible">自己的 API（OpenAI 兼容接口）</option><option value="codex_cli">本机已登录的 Codex CLI</option></select></label><label>API 地址<input id="api-base" type="url" placeholder="https://你的服务地址/v1" autocomplete="off"></label><label>API 密钥<input id="api-key" type="password" placeholder="首次填写；留空保留已有密钥" autocomplete="off"></label><div class="model-row"><label>模型名称<input id="api-model" list="model-list" placeholder="输入模型 ID，或获取模型列表" autocomplete="off"><datalist id="model-list"></datalist></label><button type="button" id="get-models">获取模型列表</button></div><div class="form-grid"><label>单次最大输出 Token<input id="api-max-output" type="number" min="256" max="128000" value="12000"></label><label>输出限额参数<select id="api-output-field"><option value="max_tokens">max_tokens（通用兼容）</option><option value="max_completion_tokens">max_completion_tokens</option></select></label><label>Python 解释器（PDF / Word）<input id="python-path" placeholder="自动使用系统 Python"></label></div><div class="checks"><label><input id="api-vision" type="checkbox" checked>模型支持图片</label><label><input id="api-reasoning" type="checkbox">接口支持 reasoning_effort 参数</label></div><label>运行数据根目录<div class="model-row"><input id="data-dir" readonly><button type="button" id="choose-data">选择文件夹</button></div></label><p class="footnote">任务按所选 API 发送必要的稿件、证据和图片。密钥由 Windows 本机加密保存，留空保留已存密钥。新配置用于之后启动的任务；当前任务保持原配置。</p><div class="form-actions"><span id="settings-status" role="status"></span><button type="submit" class="primary-button">保存设置</button></div></form></dialog>
+<dialog id="new-project"><div class="dialog-heading"><h2>新建综述项目</h2><button class="icon-button" id="new-project-close" aria-label="关闭新建项目">×</button></div><form id="new-project-form" class="desktop-form"><label>项目 ID<input id="new-id" pattern="[A-Za-z0-9][A-Za-z0-9_-]{0,79}" placeholder="my-review" required></label><label>题目<input id="new-title" required></label><label>研究问题<textarea id="new-question" rows="3" required></textarea></label><div class="form-grid"><label>领域<input id="new-domain" value="general"></label><label>累计 Token 预算<input id="new-budget" type="number" min="50000" value="6000000"></label></div><p class="footnote">先导入实际文献，再启动任务。来源不足时保留证据缺口。</p><button class="primary-button" type="submit">创建项目</button></form></dialog>
+</body></html>
